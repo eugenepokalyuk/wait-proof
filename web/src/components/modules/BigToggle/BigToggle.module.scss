@@ -1,0 +1,163 @@
+@use '@/styles/index' as s;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(3);
+  touch-action: pan-y;
+}
+
+.disabled {
+  opacity: 0.55;
+}
+
+.names {
+  display: flex;
+  justify-content: space-between;
+  gap: s.gap(4);
+  padding: 0 s.gap(1);
+}
+
+.name {
+  @include s.pressable;
+
+  max-width: 48%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 26px;
+  line-height: 32px;
+  font-weight: s.$bold;
+  letter-spacing: -0.02em;
+  color: var(--text-3);
+  transition:
+    color 0.25s,
+    transform 0.25s s.$ease;
+  transform-origin: left center;
+}
+
+.nameRight {
+  transform-origin: right center;
+}
+
+.nameActive.nameLeft {
+  color: var(--left);
+  transform: scale(1.08);
+}
+
+.nameActive.nameRight {
+  color: var(--right);
+  transform: scale(1.08);
+}
+
+.track {
+  position: relative;
+  height: clamp(116px, 34vw, 150px);
+  padding: 6px;
+  border-radius: s.$br_full;
+  background: var(--surface-2);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.glowLeft {
+  background: linear-gradient(90deg, var(--left-soft) 0%, transparent 70%);
+}
+
+.glowRight {
+  background: linear-gradient(270deg, var(--right-soft) 0%, transparent 70%);
+}
+
+.zone {
+  @include s.pressable;
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  &:focus-visible ~ .knob {
+    box-shadow:
+      0 0 0 3px var(--bg),
+      0 0 0 5px var(--text);
+  }
+}
+
+.zone_left {
+  left: 0;
+  width: 35%;
+}
+
+.zone_none {
+  left: 35%;
+  width: 30%;
+}
+
+.zone_right {
+  right: 0;
+  width: 35%;
+}
+
+.knob {
+  @include s.pressable;
+
+  position: relative;
+  z-index: 2;
+  aspect-ratio: 1;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.08),
+    0 8px 22px rgba(0, 0, 0, 0.16);
+  cursor: grab;
+  touch-action: none;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.knobFill {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.knobLeft {
+  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--left) 80%, #fff), var(--left));
+}
+
+.knobRight {
+  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--right) 80%, #fff), var(--right));
+}
+
+.grip {
+  position: absolute;
+  inset: 32%;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.55);
+}
+
+.center {
+  @include s.text_overline;
+
+  text-align: center;
+  color: var(--text-3);
+  transition: color 0.25s;
+}
+
+.centerActive {
+  color: var(--text);
+}

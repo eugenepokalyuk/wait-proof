@@ -1,0 +1,88 @@
+@use 'tokens' as *;
+
+// === Layout ===
+
+@mixin app_column {
+  width: min(100%, #{$width_app});
+  margin: 0 auto;
+  padding: 0 gap(4);
+}
+
+// === Typography ===
+// Системный шрифт: на iPhone это SF Pro, на Android — Roboto. Ноль байт
+// загрузки и родные цифры, которые умеют быть моноширинными.
+
+@mixin text_display {
+  font-weight: $semi_bold;
+  font-size: 34px;
+  line-height: 40px;
+  letter-spacing: -0.02em;
+}
+
+@mixin text_title {
+  font-weight: $semi_bold;
+  font-size: 22px;
+  line-height: 28px;
+  letter-spacing: -0.01em;
+}
+
+@mixin text_headline {
+  font-weight: $semi_bold;
+  font-size: 17px;
+  line-height: 22px;
+}
+
+@mixin text_body {
+  font-weight: $regular;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+@mixin text_callout {
+  font-weight: $regular;
+  font-size: 15px;
+  line-height: 20px;
+}
+
+@mixin text_caption {
+  font-weight: $regular;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+@mixin text_overline {
+  font-weight: $semi_bold;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+// Цифры одинаковой ширины: без этого таймер дёргается влево-вправо на
+// каждой секунде, когда «1» сменяется на «0».
+@mixin tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+// === Interaction ===
+
+@mixin pressable {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+@mixin focus_ring {
+  &:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 3px;
+  }
+}
+
+@mixin card {
+  background: var(--surface);
+  border-radius: $br_5;
+  box-shadow: var(--shadow);
+}

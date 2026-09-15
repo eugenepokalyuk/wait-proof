@@ -1,0 +1,73 @@
+@use '@/styles/index' as s;
+
+.card {
+  @include s.card;
+  @include s.pressable;
+
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+  padding: s.gap(4);
+  transition: transform 0.15s;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.names {
+  @include s.text_title;
+
+  display: flex;
+  align-items: center;
+  gap: s.gap(2);
+  min-width: 0;
+}
+
+.label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.amp {
+  color: var(--text-3);
+  font-weight: s.$regular;
+}
+
+.dot {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.left {
+  background: var(--left);
+}
+
+.right {
+  background: var(--right);
+}
+
+.status,
+.idle {
+  @include s.text_callout;
+
+  color: var(--text-2);
+}
+
+.leftText {
+  color: var(--left);
+  font-weight: s.$semi_bold;
+}
+
+.rightText {
+  color: var(--right);
+  font-weight: s.$semi_bold;
+}
+
+.elapsed {
+  margin-left: s.gap(2);
+  color: var(--text);
+}

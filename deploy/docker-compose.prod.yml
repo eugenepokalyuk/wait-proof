@@ -1,0 +1,120 @@
+# «Я тебя жду» на сервере рядом с Формой.
+#
+# Правила соседства (см. TZ.md, «Гарантии для Формы»):
+# - name: wait-proof — все docker compose команды действуют только на наш проект;
+# - наружу не публикуется ни один порт: 80/443 держит nginx Формы и ходит к
+#   api через общую сеть edge;
+# - у каждого контейнера жёсткий лимит памяти: упрётся — убьют его, не Форму.
+name: wait-proof
+
+x-app: &app
+  image: ghcr.io/eugenepokalyuk/wait-proof-api:${IMAGE_TAG:-latest}
+  env_file: /etc/wait-proof/api.env
+  environment:
+    DB_ENGINE: postgresql
+    DB_HOST: db
+    DB_PORT: "5432"
+  restart: unless-stopped
+  depends_on:
+    db:
+      condition: service_healthy
+  labels:
+    project: wait-proof
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: wait-proof-db
+    restart: unless-stopped
+    env_file: /etc/wait-proof/api.env
+    environment:
+      POSTGRES_DB: ${DB_NAME:-waitproof}
+      POSTGRES_USER: ${DB_USER:-waitproof}
+    # Пароль базы берётся из api.env (POSTGRES_PASSWORD=DB_PASSWORD, см. bootstrap)
+    command: postgres -c shared_buffers=32MB -c max_connections=20 -c work_mem=2MB
+    volumes:
+      - wait_proof_pg:/var/lib/postgresql/data
+    networks: [internal]
+    mem_limit: 128m
+    cpus: 0.5
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    labels:
+      project: wait-proof
+
+  api:
+    <<: *app
+    container_name: wait-proof-api
+    networks: [internal, edge]
+    mem_limit: 200m
+    cpus: 0.5
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health', timeout=4)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  tick:
+    <<: *app
+    container_name: wait-proof-tick
+    command: python manage.py tick --loop
+    networks: [internal]
+    mem_limit: 100m
+    cpus: 0.25
+
+  backup:
+    image: postgres:16-alpine
+    container_name: wait-proof-backup
+    restart: unless-stopped
+    env_file: /etc/wait-proof/api.env
+    entrypoint: ["/bin/sh", "/backup.sh"]
+    volumes:
+      - ./backup.sh:/backup.sh:ro
+      - /var/backups/wait-proof:/backups
+    networks: [internal]
+    mem_limit: 32m
+    cpus: 0.25
+    depends_on:
+      db:
+        condition: service_healthy
+    labels:
+      project: wait-proof
+
+  certbot:
+    image: certbot/certbot:latest
+    container_name: wait-proof-certbot
+    restart: unless-stopped
+    # Раз в 12 часов проверяем срок. Хук копирует обновлённый сертификат туда,
+    # куда смотрит nginx Формы; перечитывает его nginx по crontab (bootstrap)
+    entrypoint:
+      - /bin/sh
+      - -c
+      - >
+        trap exit TERM;
+        while :; do
+          certbot renew --webroot -w /var/www/certbot --quiet
+            --deploy-hook 'cp -L $$RENEWED_LINEAGE/fullchain.pem $$RENEWED_LINEAGE/privkey.pem /certs/';
+          sleep 12h & wait $$!;
+        done
+    volumes:
+      - /opt/edge/letsencrypt:/etc/letsencrypt
+      - /opt/edge/certbot-www:/var/www/certbot
+      - /opt/edge/certs/wait-proof:/certs
+    mem_limit: 64m
+    cpus: 0.25
+    labels:
+      project: wait-proof
+
+networks:
+  internal:
+  # Общая с nginx Формы. Создаётся один раз руками (docker network create edge)
+  # до правки Формы — иначе её compose не найдёт сеть
+  edge:
+    external: true
+
+volumes:
+  wait_proof_pg:

@@ -1,0 +1,27 @@
+@use '@/styles/index' as s;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(3);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: s.gap(3);
+  padding: s.gap(12) s.gap(4);
+  text-align: center;
+}
+
+.emptyTitle {
+  @include s.text_title;
+}
+
+.emptyText {
+  @include s.text_callout;
+
+  color: var(--text-2);
+  margin-bottom: s.gap(2);
+}

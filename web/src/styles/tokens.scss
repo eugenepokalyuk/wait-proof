@@ -1,0 +1,36 @@
+// === Gap function ===
+
+@function gap($size) {
+  @return #{$size * 4}px;
+}
+
+// === Widths ===
+
+// Приложение телефонное: на планшете и десктопе колонка не растягивается,
+// иначе огромный тумблер превращается в полосу через весь экран.
+$width_app: 480px;
+
+// === Border radius ===
+
+$br_full: 99999px;
+$br_6: 28px;
+$br_5: 22px;
+$br_4: 16px;
+$br_3: 12px;
+$br_2: 8px;
+
+// === Z-index ===
+
+$zi_tabbar: 20;
+$zi_toast: 30;
+
+// === Font weights ===
+
+$bold: 700;
+$semi_bold: 600;
+$medium: 500;
+$regular: 400;
+
+// === Motion ===
+
+$ease: cubic-bezier(0.22, 1, 0.36, 1);

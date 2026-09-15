@@ -1,0 +1,37 @@
+@use '@/styles/index' as s;
+
+.root {
+  display: flex;
+  padding: 3px;
+  border-radius: s.$br_3;
+  background: var(--surface-2);
+}
+
+.option {
+  @include s.pressable;
+  @include s.focus_ring;
+  @include s.text_callout;
+
+  position: relative;
+  flex: 1;
+  min-height: 36px;
+  border-radius: 10px;
+  color: var(--text-2);
+  font-weight: s.$medium;
+}
+
+.active {
+  color: var(--text);
+}
+
+.thumb {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.text {
+  position: relative;
+}

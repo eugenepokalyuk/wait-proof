@@ -1,0 +1,52 @@
+@use '@/styles/index' as s;
+
+.card {
+  @include s.card;
+
+  position: relative;
+  display: flex;
+  gap: s.gap(3);
+  padding: s.gap(4);
+}
+
+.icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: var(--left);
+  background: var(--left-soft);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: s.gap(1.5);
+  padding-right: s.gap(5);
+}
+
+.title {
+  @include s.text_headline;
+}
+
+.text {
+  @include s.text_callout;
+
+  color: var(--text-2);
+  margin-bottom: s.gap(1);
+}
+
+.close {
+  @include s.pressable;
+
+  position: absolute;
+  top: s.gap(2);
+  right: s.gap(2);
+  display: flex;
+  padding: 8px;
+  color: var(--text-3);
+}

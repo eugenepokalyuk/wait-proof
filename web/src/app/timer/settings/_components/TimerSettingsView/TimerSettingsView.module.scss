@@ -1,0 +1,31 @@
+@use '@/styles/index' as s;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+}
+
+.labels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: s.gap(3);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: s.gap(2);
+}
+
+.hint {
+  @include s.text_callout;
+
+  color: var(--text-2);
+}

@@ -1,0 +1,35 @@
+@use '@/styles/index' as s;
+
+.bar {
+  position: fixed;
+  z-index: s.$zi_toast;
+  left: 50%;
+  bottom: calc(var(--safe-bottom) + var(--tabbar-h) + #{s.gap(6)});
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: s.gap(4);
+  width: min(calc(100% - #{s.gap(8)}), 440px);
+  padding: s.gap(2) s.gap(2) s.gap(2) s.gap(4);
+  border-radius: s.$br_4;
+  color: var(--on-primary);
+  background: var(--primary);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+}
+
+.text {
+  @include s.text_callout;
+}
+
+.button {
+  @include s.pressable;
+  @include s.tabular;
+  @include s.text_callout;
+
+  padding: s.gap(2.5) s.gap(3);
+  border-radius: s.$br_3;
+  font-weight: s.$semi_bold;
+  color: var(--left);
+  background: color-mix(in srgb, var(--on-primary) 10%, transparent);
+}

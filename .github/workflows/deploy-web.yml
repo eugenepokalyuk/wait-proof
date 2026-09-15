@@ -1,0 +1,68 @@
+name: Deploy to GitHub Pages
+
+on:
+  # Деплой при сливе в main — только если менялся фронт
+  push:
+    branches: [main]
+    paths:
+      - 'web/**'
+      - '.github/workflows/deploy-web.yml'
+  # И кнопкой из вкладки Actions, если нужно перевыкатить без коммита
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Не отменяем уже идущий деплой — пусть докатится, лишние встают в очередь
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build static export
+        env:
+          # Project-сайт живёт в подпапке eugenepokalyuk.github.io/wait-proof —
+          # без префикса отвалятся ассеты, manifest и service worker
+          NEXT_PUBLIC_BASE_PATH: /wait-proof
+          NEXT_PUBLIC_API_URL: ${{ vars.API_URL || 'https://168-222-142-117.sslip.io/api/v1' }}
+        run: npm run build
+
+      - name: Disable Jekyll
+        # Pages прогоняет статику через Jekyll, а тот выкидывает папки,
+        # начинающиеся с подчёркивания, — то есть весь _next
+        run: touch out/.nojekyll
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,53 @@
+@use '@/styles/index' as s;
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: s.gap(2);
+  min-height: 56px;
+  padding: s.gap(3) 0 s.gap(2);
+}
+
+.back {
+  @include s.pressable;
+
+  display: flex;
+  margin-left: -8px;
+  padding: 8px;
+  border-radius: 50%;
+}
+
+.titles {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  @include s.text_display;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.subtitle {
+  @include s.text_callout;
+
+  color: var(--text-2);
+}
+
+.actions {
+  display: flex;
+  gap: s.gap(1);
+
+  a,
+  button {
+    @include s.pressable;
+
+    display: flex;
+    padding: 10px;
+    border-radius: 50%;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+}

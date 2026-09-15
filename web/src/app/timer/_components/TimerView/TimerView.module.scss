@@ -1,0 +1,67 @@
+@use '@/styles/index' as s;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(8);
+  padding-top: s.gap(4);
+}
+
+.status {
+  display: flex;
+  justify-content: center;
+  min-height: 220px;
+}
+
+.waiting,
+.idle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: s.gap(2);
+  width: 100%;
+  text-align: center;
+}
+
+.overline {
+  @include s.text_headline;
+
+  color: var(--text-2);
+}
+
+.leftText {
+  color: var(--left);
+}
+
+.rightText {
+  color: var(--right);
+}
+
+.caption {
+  @include s.text_callout;
+
+  max-width: 320px;
+  color: var(--text-2);
+}
+
+.stop {
+  margin-top: s.gap(4);
+  min-width: 200px;
+}
+
+.idleTitle {
+  @include s.text_title;
+}
+
+.missing {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+  color: var(--text-2);
+}

@@ -1,0 +1,58 @@
+@use '@/styles/index' as s;
+
+.row {
+  @include s.pressable;
+  @include s.focus_ring;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: s.gap(4);
+  width: 100%;
+  padding: s.gap(3) 0;
+  text-align: left;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.label {
+  @include s.text_body;
+}
+
+.description {
+  @include s.text_caption;
+
+  color: var(--text-2);
+}
+
+.track {
+  flex-shrink: 0;
+  display: flex;
+  width: 51px;
+  height: 31px;
+  padding: 2px;
+  border-radius: s.$br_full;
+  background: var(--surface-3);
+  transition: background 0.2s;
+}
+
+.on {
+  background: var(--success);
+}
+
+.thumb {
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+}

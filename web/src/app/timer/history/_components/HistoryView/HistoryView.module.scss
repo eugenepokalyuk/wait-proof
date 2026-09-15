@@ -1,0 +1,7 @@
+@use '@/styles/index' as s;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+}

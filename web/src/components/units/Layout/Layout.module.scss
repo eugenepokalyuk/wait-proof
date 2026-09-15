@@ -1,0 +1,31 @@
+@use '@/styles/index' as s;
+
+.main {
+  @include s.app_column;
+
+  padding-top: var(--safe-top);
+  padding-bottom: calc(var(--safe-bottom) + #{s.gap(6)});
+}
+
+.withTabs {
+  @include s.app_column;
+
+  padding-top: var(--safe-top);
+  // Место под плавающую панель, чтобы она не закрывала последний блок
+  padding-bottom: calc(var(--safe-bottom) + var(--tabbar-h) + #{s.gap(8)});
+}
+
+.offline {
+  @include s.text_caption;
+
+  position: fixed;
+  z-index: s.$zi_toast;
+  top: calc(var(--safe-top) + #{s.gap(2)});
+  left: 50%;
+  translate: -50% 0;
+  padding: s.gap(2) s.gap(4);
+  border-radius: s.$br_full;
+  color: #fff;
+  background: var(--danger);
+  white-space: nowrap;
+}

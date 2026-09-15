@@ -1,0 +1,109 @@
+@use '@/styles/index' as s;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+}
+
+.hint {
+  @include s.text_callout;
+
+  color: var(--text-2);
+}
+
+.row {
+  display: flex;
+  gap: s.gap(2);
+}
+
+.grow {
+  flex: 1;
+}
+
+.inline {
+  display: flex;
+  align-items: flex-end;
+  gap: s.gap(2);
+}
+
+.friend {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+  padding: s.gap(2) 0;
+
+  & + & {
+    border-top: 1px solid var(--stroke);
+  }
+}
+
+.person {
+  display: flex;
+  align-items: center;
+  gap: s.gap(3);
+  padding: s.gap(1) 0;
+}
+
+.avatar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-weight: s.$bold;
+  color: var(--right);
+  background: var(--right-soft);
+}
+
+.personText {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  @include s.text_headline;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.email {
+  @include s.text_caption;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-2);
+}
+
+.iconButton {
+  @include s.pressable;
+  @include s.focus_ring;
+
+  display: flex;
+  padding: 10px;
+  border-radius: 50%;
+  color: var(--text-2);
+  background: var(--surface-2);
+}
+
+.accept {
+  color: #fff;
+  background: var(--success);
+}
+
+.remove {
+  @include s.pressable;
+  @include s.text_caption;
+
+  align-self: flex-start;
+  color: var(--text-3);
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}

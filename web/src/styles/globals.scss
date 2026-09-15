@@ -1,0 +1,117 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+// Палитра — CSS-переменными, а не SCSS: тёмная тема переключается системой
+// без перезагрузки и без второго набора классов.
+:root {
+  color-scheme: light dark;
+
+  --bg: #f4f0eb;
+  --surface: #ffffff;
+  --surface-2: #ebe5de;
+  --surface-3: #e0d8cf;
+  --text: #1b1a1f;
+  --text-2: #6d6772;
+  --text-3: #a39ca6;
+  --stroke: rgba(27, 26, 31, 0.08);
+  --shadow: 0 1px 2px rgba(27, 26, 31, 0.04), 0 8px 24px rgba(27, 26, 31, 0.06);
+
+  // Две стороны тумблера. Тёплый коралл и глубокий индиго — различимы и
+  // при дальтонизме, и на солнце.
+  --left: #ff5a5f;
+  --left-soft: rgba(255, 90, 95, 0.16);
+  --right: #5a67f2;
+  --right-soft: rgba(90, 103, 242, 0.16);
+
+  --primary: #1b1a1f;
+  --on-primary: #ffffff;
+  --danger: #e5484d;
+  --success: #2f9e6b;
+
+  --tabbar-h: 64px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e0d11;
+    --surface: #19181e;
+    --surface-2: #232129;
+    --surface-3: #2e2b35;
+    --text: #f4f1ee;
+    --text-2: #9e97a4;
+    --text-3: #676170;
+    --stroke: rgba(255, 255, 255, 0.08);
+    --shadow: 0 0 0 1px rgba(255, 255, 255, 0.04);
+
+    --left: #ff6b6f;
+    --left-soft: rgba(255, 107, 111, 0.18);
+    --right: #7580ff;
+    --right-soft: rgba(117, 128, 255, 0.2);
+
+    --primary: #f4f1ee;
+    --on-primary: #0e0d11;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  background: var(--bg);
+}
+
+body {
+  @include text_body;
+
+  min-height: 100dvh;
+  margin: 0;
+  color: var(--text);
+  background: var(--bg);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    'SF Pro Text',
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  // Резиновый отскок страницы на iOS в standalone выглядит как баг
+  overscroll-behavior-y: none;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+input {
+  font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--left-soft);
+}

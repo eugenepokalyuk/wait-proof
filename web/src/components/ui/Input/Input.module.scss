@@ -1,0 +1,73 @@
+@use '@/styles/index' as s;
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(1.5);
+}
+
+.label {
+  @include s.text_caption;
+
+  padding-left: s.gap(1);
+  color: var(--text-2);
+}
+
+.box {
+  display: flex;
+  align-items: center;
+  border-radius: s.$br_4;
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1.5px transparent;
+  transition: box-shadow 0.15s;
+
+  &:focus-within {
+    box-shadow: inset 0 0 0 1.5px var(--text);
+  }
+}
+
+.invalid {
+  box-shadow: inset 0 0 0 1.5px var(--danger);
+}
+
+.input {
+  // 16px — меньше iOS увеличивает страницу при фокусе
+  @include s.text_body;
+
+  flex: 1;
+  min-width: 0;
+  height: 52px;
+  padding: 0 s.gap(4);
+  border: 0;
+  outline: none;
+  background: transparent;
+
+  &::placeholder {
+    color: var(--text-3);
+  }
+}
+
+.eye {
+  @include s.pressable;
+
+  display: flex;
+  padding: 0 s.gap(4);
+  height: 52px;
+  align-items: center;
+  color: var(--text-2);
+}
+
+.hint,
+.error {
+  @include s.text_caption;
+
+  padding-left: s.gap(1);
+}
+
+.hint {
+  color: var(--text-3);
+}
+
+.error {
+  color: var(--danger);
+}

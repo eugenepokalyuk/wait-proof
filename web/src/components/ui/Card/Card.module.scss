@@ -1,0 +1,23 @@
+@use '@/styles/index' as s;
+
+.card {
+  @include s.card;
+
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(3);
+  padding: s.gap(4);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: s.gap(2);
+}
+
+.title {
+  @include s.text_overline;
+
+  color: var(--text-2);
+}

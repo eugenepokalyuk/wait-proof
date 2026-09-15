@@ -1,0 +1,73 @@
+@use '@/styles/index' as s;
+
+.bar {
+  position: fixed;
+  z-index: s.$zi_tabbar;
+  left: 50%;
+  bottom: calc(var(--safe-bottom) + #{s.gap(3)});
+  transform: translateX(-50%);
+  display: flex;
+  gap: s.gap(1);
+  padding: s.gap(1.5);
+  border-radius: s.$br_6;
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  box-shadow: var(--shadow), 0 0 0 1px var(--stroke);
+  backdrop-filter: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+}
+
+.tab {
+  @include s.pressable;
+  @include s.focus_ring;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 84px;
+  padding: s.gap(1.5) 0;
+  border-radius: s.$br_5;
+  color: var(--text-2);
+}
+
+.active {
+  color: var(--text);
+}
+
+.pill {
+  position: absolute;
+  inset: 0;
+  border-radius: s.$br_5;
+  background: var(--surface-2);
+}
+
+.icon {
+  position: relative;
+  display: flex;
+}
+
+.label {
+  @include s.text_caption;
+
+  position: relative;
+  font-size: 11px;
+  line-height: 13px;
+  font-weight: s.$medium;
+}
+
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--left);
+  color: #fff;
+  font-size: 10px;
+  line-height: 16px;
+  font-weight: s.$bold;
+  text-align: center;
+}

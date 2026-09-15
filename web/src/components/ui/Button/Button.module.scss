@@ -1,0 +1,68 @@
+@use '@/styles/index' as s;
+
+.button {
+  @include s.pressable;
+  @include s.focus_ring;
+  @include s.text_headline;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: s.gap(2);
+  min-height: 52px;
+  padding: 0 s.gap(5);
+  border-radius: s.$br_4;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.45;
+  }
+}
+
+.primary {
+  color: var(--on-primary);
+  background: var(--primary);
+}
+
+.secondary {
+  color: var(--text);
+  background: var(--surface-2);
+}
+
+.ghost {
+  color: var(--text-2);
+  background: transparent;
+}
+
+.danger {
+  color: var(--danger);
+  background: transparent;
+}
+
+.small {
+  @include s.text_callout;
+
+  min-height: 38px;
+  padding: 0 s.gap(3);
+  border-radius: s.$br_3;
+  font-weight: s.$semi_bold;
+}
+
+.full {
+  width: 100%;
+}
+
+.pending:disabled {
+  opacity: 0.6;
+}
+
+.icon {
+  display: inline-flex;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}

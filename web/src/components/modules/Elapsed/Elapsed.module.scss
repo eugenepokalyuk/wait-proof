@@ -1,0 +1,41 @@
+@use '@/styles/index' as s;
+
+.large {
+  @include s.tabular;
+
+  display: inline-flex;
+  align-items: center;
+  font-size: clamp(56px, 18vw, 76px);
+  line-height: 1;
+  font-weight: s.$semi_bold;
+  letter-spacing: -0.03em;
+}
+
+.cell {
+  position: relative;
+  display: inline-block;
+  width: 0.6em;
+  height: 1.1em;
+  overflow: hidden;
+}
+
+.char {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.colon {
+  width: 0.3em;
+  text-align: center;
+  color: var(--text-3);
+  transform: translateY(-0.04em);
+}
+
+.small {
+  @include s.tabular;
+
+  font-weight: s.$semi_bold;
+}

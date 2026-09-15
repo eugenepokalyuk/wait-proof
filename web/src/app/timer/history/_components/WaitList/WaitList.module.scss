@@ -1,0 +1,68 @@
+@use '@/styles/index' as s;
+
+.list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: s.gap(3);
+  padding: s.gap(3) 0;
+
+  & + & {
+    border-top: 1px solid var(--stroke);
+  }
+}
+
+.muted {
+  opacity: 0.5;
+}
+
+.dot {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-3);
+}
+
+.left {
+  background: var(--left);
+}
+
+.right {
+  background: var(--right);
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.line {
+  @include s.text_callout;
+}
+
+.meta {
+  @include s.text_caption;
+
+  color: var(--text-2);
+}
+
+.duration {
+  @include s.tabular;
+  @include s.text_headline;
+
+  white-space: nowrap;
+}
+
+.empty {
+  @include s.text_callout;
+
+  color: var(--text-2);
+}

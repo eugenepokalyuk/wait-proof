@@ -1,0 +1,38 @@
+@use '@/styles/index' as s;
+
+.stack {
+  position: fixed;
+  z-index: s.$zi_toast;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--safe-bottom) + var(--tabbar-h) + #{s.gap(6)});
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: s.gap(2);
+  padding: 0 s.gap(4);
+  pointer-events: none;
+}
+
+.toast {
+  @include s.text_callout;
+
+  width: min(100%, 440px);
+  padding: s.gap(3.5) s.gap(4);
+  border-radius: s.$br_4;
+  color: var(--on-primary);
+  background: var(--primary);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.error {
+  background: var(--danger);
+  color: #fff;
+}
+
+.success {
+  background: var(--success);
+  color: #fff;
+}

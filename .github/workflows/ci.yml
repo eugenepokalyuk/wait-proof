@@ -1,0 +1,70 @@
+name: CI
+
+# Проверка на пул-реквестах: сборка фронта, тесты бэкенда и сборка образа.
+# Ошибка здесь означает, что на прод она бы не уехала.
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Сборка
+        # next build прогоняет и TypeScript — отдельного шага не нужно
+        env:
+          NEXT_PUBLIC_BASE_PATH: /wait-proof
+          NEXT_PUBLIC_API_URL: https://168-222-142-117.sslip.io/api/v1
+        run: npm run build
+
+      - name: Экспорт не пустой
+        # Молча сломанный экспорт выглядит как успешная сборка: out/ есть, а
+        # нужных файлов в нём нет
+        run: |
+          for f in index.html login/index.html timer/index.html sw.js manifest.webmanifest icons/icon-192.png; do
+            test -f "out/$f" || { echo "нет out/$f"; exit 1; }
+          done
+          grep -q '"start_url":"/wait-proof/"' out/manifest.webmanifest || { echo "manifest без basePath"; exit 1; }
+          echo "экспорт на месте: $(find out -name '*.html' | wc -l | xargs) страниц"
+
+  api:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: api/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Проверки и тесты
+        env:
+          DB_ENGINE: sqlite
+        run: |
+          python manage.py makemigrations --check --dry-run
+          python manage.py check
+          python manage.py test tests
+
+      - name: Сборка образа
+        run: docker build -t wait-proof-api:ci .

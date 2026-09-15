@@ -1,0 +1,38 @@
+@use '@/styles/index' as s;
+
+.score {
+  @include s.card;
+  @include s.pressable;
+
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+  width: 100%;
+  margin-top: s.gap(4);
+  padding: s.gap(4);
+  text-align: left;
+}
+
+.title {
+  @include s.text_overline;
+
+  color: var(--text-2);
+}
+
+.row {
+  @include s.tabular;
+  @include s.text_body;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.left {
+  color: var(--left);
+  font-weight: s.$semi_bold;
+}
+
+.right {
+  color: var(--right);
+  font-weight: s.$semi_bold;
+}

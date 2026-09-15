@@ -1,0 +1,104 @@
+@use '@/styles/index' as s;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(8);
+  min-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - #{s.gap(6)});
+  padding-top: s.gap(12);
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: s.gap(2);
+  text-align: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  width: 96px;
+  height: 52px;
+  margin-bottom: s.gap(4);
+  padding: 5px;
+  border-radius: s.$br_full;
+  background: linear-gradient(90deg, var(--left-soft), var(--right-soft));
+}
+
+.logoKnob {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--left);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  animation: logo 3.2s s.$ease infinite;
+}
+
+@keyframes logo {
+  0%,
+  20% {
+    transform: translateX(0);
+    background: var(--left);
+  }
+  40%,
+  60% {
+    transform: translateX(22px);
+    background: var(--surface);
+  }
+  80%,
+  100% {
+    transform: translateX(44px);
+    background: var(--right);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logoKnob {
+    animation: none;
+  }
+}
+
+.title {
+  @include s.text_display;
+
+  font-size: 38px;
+  line-height: 44px;
+}
+
+.subtitle {
+  @include s.text_body;
+
+  color: var(--text-2);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+}
+
+.error {
+  @include s.text_callout;
+
+  color: var(--danger);
+  text-align: center;
+}
+
+.note {
+  @include s.text_caption;
+
+  color: var(--text-3);
+  text-align: center;
+}
+
+.install {
+  @include s.text_callout;
+
+  margin-top: auto;
+  color: var(--text-2);
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

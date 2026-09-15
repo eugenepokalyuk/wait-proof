@@ -1,0 +1,16 @@
+@use '@/styles/index' as s;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(3);
+  padding: s.gap(3);
+  border-radius: s.$br_4;
+  background: var(--bg);
+}
+
+.labels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: s.gap(2);
+}

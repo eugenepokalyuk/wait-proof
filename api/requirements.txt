@@ -1,0 +1,13 @@
+Django==5.1.15
+djangorestframework==3.16.1
+djangorestframework-simplejwt==5.5.1
+django-cors-headers==4.9.0
+psycopg2-binary==2.9.13
+python-dotenv==1.2.3
+gunicorn==23.0.0
+# Web Push с подписью VAPID. Тянет cryptography и aiohttp — это цена
+# шифрования полезной нагрузки по RFC 8291, руками его не пишут.
+pywebpush==2.5.0
+# Статика админки из самого контейнера: наружу нас отдаёт nginx Формы,
+# и общий том со статикой между двумя проектами хуже этой зависимости.
+whitenoise==6.12.0
