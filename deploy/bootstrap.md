@@ -1,5 +1,17 @@
 # Подготовка сервера
 
+Шаги 1–5 ниже собраны в скрипт [bootstrap.sh](bootstrap.sh): осмотр, снимок
+Формы, пользователь `waitproof`, сеть `edge`, каталоги, временный сертификат,
+`/etc/wait-proof/api.env` с секретами, сгенерированными на самом сервере.
+Запуск с машины, где есть доступ root по ssh:
+
+```bash
+ssh root@168.222.142.117 "DEPLOY_PUBKEY='$(cat ~/.ssh/wait-proof-deploy.pub)' bash -s" < deploy/bootstrap.sh
+```
+
+Скрипт идемпотентный и останавливается, если на сервере мало памяти.
+Ниже — то же самое по шагам, для понимания и ручного разбора.
+
 Один раз, руками, под root. Каждый шаг только **добавляет** новое рядом с
 Формой: пароли, ssh, файрвол, пакеты и демон Docker не трогаются. Код на
 сервер не копируется — сервер клонирует публичный репозиторий.
@@ -54,27 +66,11 @@ openssl req -x509 -nodes -newkey rsa:2048 -days 30 -subj '/CN=168-222-142-117.ss
 
 ## 5. Окружение `/etc/wait-proof/api.env`
 
-```bash
-cd /opt/wait-proof
-KEYS=$(docker run --rm ghcr.io/eugenepokalyuk/wait-proof-api:latest python manage.py vapid_keys 2>/dev/null)
-DBPASS=$(openssl rand -hex 24)
-cat > /etc/wait-proof/api.env <<ENV
-DJANGO_SECRET_KEY=$(openssl rand -hex 32)
-DJANGO_DEBUG=False
-DJANGO_ALLOWED_HOSTS=168-222-142-117.sslip.io,wait-proof-api,localhost,127.0.0.1
-CORS_ALLOWED_ORIGINS=https://eugenepokalyuk.github.io
-CSRF_TRUSTED_ORIGINS=https://168-222-142-117.sslip.io
-SECURE_COOKIES=True
-APP_URL=https://eugenepokalyuk.github.io/wait-proof
-DB_NAME=waitproof
-DB_USER=waitproof
-DB_PASSWORD=$DBPASS
-POSTGRES_PASSWORD=$DBPASS
-$KEYS
-VAPID_SUBJECT=https://eugenepokalyuk.github.io/wait-proof/
-ENV
-chmod 640 /etc/wait-proof/api.env && chown root:waitproof /etc/wait-proof/api.env
-```
+Генерируется скриптом: `DJANGO_SECRET_KEY`, пароль базы (`DB_PASSWORD` и
+тот же `POSTGRES_PASSWORD`), пара VAPID-ключей через `openssl` + `python3`,
+адреса `ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS`, `CSRF_TRUSTED_ORIGINS`,
+`APP_URL`. Права `640 root:waitproof`. Уже существующий файл не
+перезаписывается — иначе смена VAPID-ключа отписала бы все телефоны.
 
 ## 6. Первый запуск нашего проекта
 

@@ -57,6 +57,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
     # Пока сервер не подготовлен (секреты не заведены), выкатка пропускается,
     # а не краснеет на каждом пуше
     if: ${{ vars.DEPLOY_ENABLED == 'true' }}
@@ -76,7 +79,9 @@ jobs:
           # Пиним ключ хоста: без него ssh либо спросит подтверждение, либо
           # молча пустит на подменённый сервер
           printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
-          ssh -i ~/.ssh/id_deploy waitproof@"$HOST" "IMAGE_TAG=${{ github.sha }} bash -s" < deploy/deploy.sh
+          # Токен уходит в окружение удалённого bash, а не в аргументы команды
+          { printf 'export IMAGE_TAG=%s GHCR_USER=%s GHCR_TOKEN=%s\n' "${{ github.sha }}" "${{ github.actor }}" "${{ secrets.GITHUB_TOKEN }}"; cat deploy/deploy.sh; } \
+            | ssh -i ~/.ssh/id_deploy waitproof@"$HOST" 'bash -s'
 
       - name: Проверка снаружи
         # Через nginx Формы — так проверяется вся цепочка, а не только контейнер

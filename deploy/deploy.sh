@@ -17,7 +17,13 @@ git fetch --prune origin main
 git reset --hard origin/main
 
 echo "==> образ $IMAGE_TAG"
+# Пакет в GHCR приватный. Токен одноразовый — GITHUB_TOKEN живёт, пока идёт
+# job, — поэтому сразу после скачивания выходим, чтобы он не лежал на диске
+if [ -n "${GHCR_TOKEN:-}" ]; then
+    echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin >/dev/null
+fi
 $COMPOSE pull api tick
+docker logout ghcr.io >/dev/null 2>&1 || true
 
 echo "==> база"
 $COMPOSE up -d db
