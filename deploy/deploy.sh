@@ -26,7 +26,9 @@ $COMPOSE pull api tick
 docker logout ghcr.io >/dev/null 2>&1 || true
 
 echo "==> база"
-$COMPOSE up -d db
+# --wait: без него первый запуск падал на миграциях — postgres ещё
+# инициализировал кластер, а migrate уже стучался в порт
+$COMPOSE up -d --wait db
 $COMPOSE run --rm --no-deps api python manage.py migrate --noinput
 $COMPOSE run --rm --no-deps api python manage.py createcachetable
 
