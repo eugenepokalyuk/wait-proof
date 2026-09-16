@@ -29,8 +29,11 @@ echo "==> база"
 # --wait: без него первый запуск падал на миграциях — postgres ещё
 # инициализировал кластер, а migrate уже стучался в порт
 $COMPOSE up -d --wait db
-$COMPOSE run --rm --no-deps api python manage.py migrate --noinput
-$COMPOSE run --rm --no-deps api python manage.py createcachetable
+# -T обязательно: скрипт приходит по stdin, а docker compose run без -T
+# забирает этот же stdin себе, и bash не видит остаток файла — выкатка
+# молча заканчивалась после миграций с кодом 0
+$COMPOSE run --rm -T --no-deps api python manage.py migrate --noinput
+$COMPOSE run --rm -T --no-deps api python manage.py createcachetable
 
 echo "==> перезапуск"
 $COMPOSE up -d --remove-orphans
